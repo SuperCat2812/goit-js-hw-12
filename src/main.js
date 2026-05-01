@@ -47,14 +47,14 @@ async function onSearchFormImages(e) {
     if (totalHits / ipPages > 1) {
       refs.loaderMore.classList.remove('is-hidden');
     }
-    if (totalHits * ipPages >= page) {
-      refs.loaderMore.classList.add('is-hidden');
-      refs.loaderMore.removeEventListener('click', onLoaderMore);
-      iziToast.info({
-        message: `We're sorry, but you've reached the end of search results.`,
-        position: 'topRight',
-      });
-    }
+    // if (totalHits * ipPages >= page) {
+    //   refs.loaderMore.classList.add('is-hidden');
+    //   refs.loaderMore.removeEventListener('click', onLoaderMore);
+    //   iziToast.info({
+    //     message: `We're sorry, but you've reached the end of search results.`,
+    //     position: 'topRight',
+    //   });
+    // }
     const imagesCart = hits;
 
     ImagesRender(imagesCart);
@@ -72,30 +72,28 @@ async function onSearchFormImages(e) {
 async function onLoaderMore() {
   page++;
 
-  const imageData = await getImage(name, page, ipPages);
   try {
-    const { total, totalHits, hits } = imageData;
+    const { totalHits, hits } = await getImage(name, page, ipPages);
+
+    if (totalHits > 1) {
+      refs.loaderMore.classList.remove('is-hidden');
+    }
+    // if (totalHits * ipPages >= page) {
+    //   refs.loaderMore.classList.add('is-hidden');
+    //   refs.loaderMore.removeEventListener('click', onLoaderMore);
+    //   iziToast.info({
+    //     message: `We're sorry, but you've reached the end of search results.`,
+    //     position: 'topRight',
+    //   });
+    // }
+
+    ImagesRender(hits);
+    onImagesRenderLarge();
     const elementHeight = refs.gallery.children[0].getBoundingClientRect().height;
     scrollBy({
       top: elementHeight * 2,
       behavior: 'smooth',
     });
-
-    if (totalHits > 1) {
-      refs.loaderMore.classList.remove('is-hidden');
-    }
-    if (totalHits * ipPages >= page) {
-      refs.loaderMore.classList.add('is-hidden');
-      refs.loaderMore.removeEventListener('click', onLoaderMore);
-      iziToast.info({
-        message: `We're sorry, but you've reached the end of search results.`,
-        position: 'topRight',
-      });
-    }
-    const imagesCart = hits;
-
-    await ImagesRender(imagesCart);
-    await onImagesRenderLarge();
   } catch (error) {
     iziToast.error({
       message: 'Error loud render',
