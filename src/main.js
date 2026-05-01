@@ -44,10 +44,10 @@ async function onSearchFormImages(e) {
 
       return;
     }
-    if (totalHits / 15 > 1) {
+    if (totalHits / ipPages > 1) {
       refs.loaderMore.classList.remove('is-hidden');
     }
-    if (totalHits / 15 === page) {
+    if (totalHits / ipPages === page) {
       refs.loaderMore.classList.add('is-hidden');
       refs.loaderMore.removeEventListener('click', onLoaderMore);
     }
@@ -70,24 +70,21 @@ async function onLoaderMore() {
 
   const imageData = await getImage(name, page, ipPages);
   try {
+    const { total, totalHits, hits } = imageData;
     const elementHeight = refs.gallery.children[0].getBoundingClientRect().height;
     scrollBy({
       top: elementHeight * 2,
       behavior: 'smooth',
     });
-    if (imageData.total === 0) {
-      iziToast.error({
-        message: 'Sorry, there are no images matching your search query. Please try again!',
-        position: 'topRight',
-      });
 
-      return;
-    }
-    if (imageData.totalHits > 1) {
+    if (totalHits > 1) {
       refs.loaderMore.classList.remove('is-hidden');
     }
-
-    const imagesCart = imageData.hits;
+    if (totalHits / ipPages === page) {
+      refs.loaderMore.classList.add('is-hidden');
+      refs.loaderMore.removeEventListener('click', onLoaderMore);
+    }
+    const imagesCart = hits;
 
     await ImagesRender(imagesCart);
     await onImagesRenderLarge();
