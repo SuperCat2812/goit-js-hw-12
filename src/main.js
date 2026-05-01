@@ -31,8 +31,8 @@ async function onSearchFormImages(e) {
     iziToast.error({ message: 'input empty', position: 'topRight' });
     return;
   }
-  onLouder();
-  onImagesRenderClear();
+  await onLouder();
+  await onImagesRenderClear();
   const imageData = await getImage(name, page, ipPages);
   try {
     if (imageData.total === 0) {
@@ -55,14 +55,13 @@ async function onSearchFormImages(e) {
     await ImagesRender(imagesCart);
     await onImagesRenderLarge();
     elementHeight = refs.gallery.children[0].getBoundingClientRect().height;
-
-    // } catch (error) {
-    //   iziToast.error({
-    //     message: 'Error loud render',
-    //     position: 'topRight',
-    //   });
+  } catch (error) {
+    iziToast.error({
+      message: 'Error loud render',
+      position: 'topRight',
+    });
   } finally {
-    offLouder();
+    await offLouder();
   }
 }
 async function onLoaderMore() {
@@ -72,8 +71,8 @@ async function onLoaderMore() {
   const imageData = await getImage(name, page, ipPages);
   try {
     scrollBy({
-      top: elementHeight * 4,
-      behavior: 'instant',
+      top: elementHeight * 2,
+      behavior: 'smooth',
     });
     if (imageData.total === 0) {
       iziToast.error({
@@ -89,14 +88,14 @@ async function onLoaderMore() {
 
     const imagesCart = imageData.hits;
 
-    ImagesRender(imagesCart);
-    onImagesRenderLarge();
-    // } catch (error) {
-    //   iziToast.error({
-    //     message: 'Error loud render',
-    //     position: 'topRight',
-    //   });
+    await ImagesRender(imagesCart);
+    await onImagesRenderLarge();
+  } catch (error) {
+    iziToast.error({
+      message: 'Error loud render',
+      position: 'topRight',
+    });
   } finally {
-    offLouder();
+    await offLouder();
   }
 }
