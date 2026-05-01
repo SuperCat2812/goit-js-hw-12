@@ -68,7 +68,6 @@ async function onSearchFormImages(e) {
 async function onLoaderMore() {
   page++;
 
-  name = refs.input.value.trim();
   const imageData = await getImage(name, page, ipPages);
   try {
     const elementHeight = refs.gallery.children[0].getBoundingClientRect().height;
