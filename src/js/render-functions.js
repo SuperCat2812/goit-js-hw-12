@@ -34,18 +34,18 @@ export async function ImagesRender(images) {
     .join('');
   refs.gallery.insertAdjacentHTML('beforeend', i);
 }
-export async function onImagesRenderLarge() {
+export function onImagesRenderLarge() {
   large.refresh();
 }
 
-export async function onLouder() {
+export function onLouder() {
   return refs.loader.classList.add('is-active');
 }
 
-export async function offLouder() {
+export function offLouder() {
   return refs.loader.classList.remove('is-active');
 }
 
-export async function onImagesRenderClear() {
+export function onImagesRenderClear() {
   return (refs.gallery.innerHTML = '');
 }

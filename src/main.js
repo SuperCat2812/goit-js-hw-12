@@ -31,8 +31,8 @@ async function onSearchFormImages(e) {
     iziToast.error({ message: 'input empty', position: 'topRight' });
     return;
   }
-  await onLouder();
-  await onImagesRenderClear();
+  onLouder();
+  onImagesRenderClear();
   const imageData = await getImage(name, page, ipPages);
   try {
     if (imageData.total === 0) {
@@ -96,6 +96,6 @@ async function onLoaderMore() {
       position: 'topRight',
     });
   } finally {
-    await offLouder();
+    offLouder();
   }
 }
