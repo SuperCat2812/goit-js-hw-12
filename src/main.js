@@ -35,7 +35,8 @@ async function onSearchFormImages(e) {
   onImagesRenderClear();
   const imageData = await getImage(name, page, ipPages);
   try {
-    if (imageData.total === 0) {
+    const { total, totalHits, hits } = imageData;
+    if (total === 0) {
       iziToast.error({
         message: 'Sorry, there are no images matching your search query. Please try again!',
         position: 'topRight',
@@ -43,14 +44,14 @@ async function onSearchFormImages(e) {
 
       return;
     }
-    if (imageData.totalHits / 15 > 1) {
+    if (totalHits / 15 > 1) {
       refs.loaderMore.classList.remove('is-hidden');
     }
-    if (imageData.totalHits / 15 === page) {
+    if (totalHits / 15 === page) {
       refs.loaderMore.classList.add('is-hidden');
       refs.loaderMore.removeEventListener('click', onLoaderMore);
     }
-    const imagesCart = imageData.hits;
+    const imagesCart = hits;
 
     await ImagesRender(imagesCart);
     await onImagesRenderLarge();
@@ -66,6 +67,7 @@ async function onSearchFormImages(e) {
 }
 async function onLoaderMore() {
   page++;
+  console.log(elementHeight);
 
   let name = refs.input.value.trim();
   const imageData = await getImage(name, page, ipPages);
