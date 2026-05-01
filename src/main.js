@@ -47,9 +47,13 @@ async function onSearchFormImages(e) {
     if (totalHits / ipPages > 1) {
       refs.loaderMore.classList.remove('is-hidden');
     }
-    if (totalHits / ipPages === page) {
+    if (totalHits * ipPages >= page) {
       refs.loaderMore.classList.add('is-hidden');
       refs.loaderMore.removeEventListener('click', onLoaderMore);
+      iziToast.info({
+        message: `We're sorry, but you've reached the end of search results.`,
+        position: 'topRight',
+      });
     }
     const imagesCart = hits;
 
@@ -80,9 +84,13 @@ async function onLoaderMore() {
     if (totalHits > 1) {
       refs.loaderMore.classList.remove('is-hidden');
     }
-    if (totalHits / ipPages === page) {
+    if (totalHits * ipPages >= page) {
       refs.loaderMore.classList.add('is-hidden');
       refs.loaderMore.removeEventListener('click', onLoaderMore);
+      iziToast.info({
+        message: `We're sorry, but you've reached the end of search results.`,
+        position: 'topRight',
+      });
     }
     const imagesCart = hits;
 
