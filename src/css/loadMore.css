@@ -1,0 +1,6 @@
+.load-more-btn {
+  display: block;
+}
+.load-more-btn.is-hidden {
+  display: none;
+}

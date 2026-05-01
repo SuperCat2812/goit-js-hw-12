@@ -5,8 +5,8 @@ const large = new SimpleLightbox('.gallery-item a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
-export function ImagesRender(images) {
-  let i = images
+export async function ImagesRender(images) {
+  let i = await images
     .map(
       image => `  <li class="gallery-item">
   <a href="${image.largeImageURL}">
@@ -34,18 +34,18 @@ export function ImagesRender(images) {
     .join('');
   refs.gallery.insertAdjacentHTML('beforeend', i);
 }
-export function onImagesRenderLarge() {
+export async function onImagesRenderLarge() {
   large.refresh();
 }
 
-export function onLouder() {
+export async function onLouder() {
   return refs.loader.classList.add('is-active');
 }
 
-export function offLouder() {
+export async function offLouder() {
   return refs.loader.classList.remove('is-active');
 }
 
-export function onImagesRenderClear() {
+export async function onImagesRenderClear() {
   return (refs.gallery.innerHTML = '');
 }

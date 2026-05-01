@@ -13,11 +13,19 @@ export const refs = {
   input: document.querySelector('input[name="search-text"]'),
   gallery: document.querySelector('.gallery'),
   loader: document.querySelector('.loader'),
+  loaderMore: document.querySelector('.load-more-btn '),
 };
 
+let page = 1;
+let ipPages = 15;
+let elementHeight = 0;
+
 refs.form.addEventListener('submit', onSearchFormImages);
-function onSearchFormImages(e) {
+refs.loaderMore.addEventListener('click', onLoaderMore);
+
+async function onSearchFormImages(e) {
   e.preventDefault();
+  refs.loaderMore.classList.add('is-hidden');
   let name = refs.input.value.trim();
   if (!name) {
     iziToast.error({ message: 'input empty', position: 'topRight' });
@@ -25,27 +33,70 @@ function onSearchFormImages(e) {
   }
   onLouder();
   onImagesRenderClear();
-  getImage(name)
-    .then(imageData => {
-      if (imageData.total === 0) {
-        iziToast.error({
-          message: 'Sorry, there are no images matching your search query. Please try again!',
-          position: 'topRight',
-        });
+  const imageData = await getImage(name, page, ipPages);
+  try {
+    if (imageData.total === 0) {
+      iziToast.error({
+        message: 'Sorry, there are no images matching your search query. Please try again!',
+        position: 'topRight',
+      });
 
-        return;
-      }
+      return;
+    }
+    if (imageData.totalHits / 15 > 1) {
+      refs.loaderMore.classList.remove('is-hidden');
+    }
+    if (imageData.totalHits / 15 === page) {
+      refs.loaderMore.classList.add('is-hidden');
+      refs.loaderMore.removeEventListener('click', onLoaderMore);
+    }
+    const imagesCart = imageData.hits;
 
-      const imagesCart = imageData.hits;
+    await ImagesRender(imagesCart);
+    await onImagesRenderLarge();
+    elementHeight = refs.gallery.children[0].getBoundingClientRect().height;
 
-      ImagesRender(imagesCart);
-      onImagesRenderLarge();
-    })
-    // .catch(error =>
+    // } catch (error) {
     //   iziToast.error({
     //     message: 'Error loud render',
     //     position: 'topRight',
-    //   })
-    // )
-    .finally(() => offLouder());
+    //   });
+  } finally {
+    offLouder();
+  }
+}
+async function onLoaderMore() {
+  page++;
+
+  let name = refs.input.value.trim();
+  const imageData = await getImage(name, page, ipPages);
+  try {
+    scrollBy({
+      top: elementHeight * 4,
+      behavior: 'instant',
+    });
+    if (imageData.total === 0) {
+      iziToast.error({
+        message: 'Sorry, there are no images matching your search query. Please try again!',
+        position: 'topRight',
+      });
+
+      return;
+    }
+    if (imageData.totalHits > 1) {
+      refs.loaderMore.classList.remove('is-hidden');
+    }
+
+    const imagesCart = imageData.hits;
+
+    ImagesRender(imagesCart);
+    onImagesRenderLarge();
+    // } catch (error) {
+    //   iziToast.error({
+    //     message: 'Error loud render',
+    //     position: 'topRight',
+    //   });
+  } finally {
+    offLouder();
+  }
 }
