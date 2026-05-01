@@ -5,8 +5,8 @@ const large = new SimpleLightbox('.gallery-item a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
-export async function ImagesRender(images) {
-  let i = await images
+export function ImagesRender(images) {
+  let i = images
     .map(
       image => `  <li class="gallery-item">
   <a href="${image.largeImageURL}">

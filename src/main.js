@@ -18,7 +18,7 @@ export const refs = {
 
 let page = 1;
 let ipPages = 15;
-let elementHeight = 0;
+let name = '';
 
 refs.form.addEventListener('submit', onSearchFormImages);
 refs.loaderMore.addEventListener('click', onLoaderMore);
@@ -26,7 +26,7 @@ refs.loaderMore.addEventListener('click', onLoaderMore);
 async function onSearchFormImages(e) {
   e.preventDefault();
   refs.loaderMore.classList.add('is-hidden');
-  let name = refs.input.value.trim();
+  name = refs.input.value.trim();
   if (!name) {
     iziToast.error({ message: 'input empty', position: 'topRight' });
     return;
@@ -53,9 +53,9 @@ async function onSearchFormImages(e) {
     }
     const imagesCart = hits;
 
-    await ImagesRender(imagesCart);
-    await onImagesRenderLarge();
-    elementHeight = refs.gallery.children[0].getBoundingClientRect().height;
+    ImagesRender(imagesCart);
+    onImagesRenderLarge();
+    refs.input.value = '';
   } catch (error) {
     iziToast.error({
       message: 'Error loud render',
@@ -67,11 +67,11 @@ async function onSearchFormImages(e) {
 }
 async function onLoaderMore() {
   page++;
-  console.log(elementHeight);
 
-  let name = refs.input.value.trim();
+  name = refs.input.value.trim();
   const imageData = await getImage(name, page, ipPages);
   try {
+    const elementHeight = refs.gallery.children[0].getBoundingClientRect().height;
     scrollBy({
       top: elementHeight * 2,
       behavior: 'smooth',
