@@ -55,7 +55,7 @@ async function onSearchFormImages(e) {
 
     ImagesRender(imagesCart);
     onImagesRenderLarge();
-    refs.input.value = '';
+    refs.form.reset();
   } catch (error) {
     iziToast.error({
       message: 'Error loud render',
