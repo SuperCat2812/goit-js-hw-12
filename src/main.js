@@ -46,8 +46,12 @@ async function onSearchFormImages(e) {
 
       return;
     }
-    if (totalHits / ipPages > 1) {
+    const totalPages = Math.ceil(totalHits / ipPages);
+
+    if (page < totalPages) {
       showLoadMoreBtn();
+    } else {
+      hideLoadMoreBtn();
     }
 
     const imagesCart = hits;
@@ -70,11 +74,13 @@ async function onLoaderMore() {
     hideLoadMoreBtn();
     const { totalHits, hits } = await getImage(name, page, ipPages);
 
-    if (totalHits > 1) {
+    const totalPages = Math.ceil(totalHits / ipPages);
+
+    if (page < totalPages) {
       showLoadMoreBtn();
-    }
-    if (totalHits / ipPages <= page) {
+    } else {
       hideLoadMoreBtn();
+
       iziToast.info({
         message: `We're sorry, but you've reached the end of search results.`,
         position: 'topRight',
