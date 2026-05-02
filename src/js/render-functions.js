@@ -51,10 +51,10 @@ export function onImagesRenderClear() {
   return (refs.gallery.innerHTML = '');
 }
 
-export function onLouderMore() {
-  return refs.loaderMore.classList.remove('is-hidden');
+export function showLoadMoreBtn() {
+  return refs.loadMoreBtn.classList.remove('is-hidden');
 }
 
-export function offLouderMore() {
-  return refs.loaderMore.classList.add('is-hidden');
+export function hideLoadMoreBtn() {
+  return refs.loadMoreBtn.classList.add('is-hidden');
 }
