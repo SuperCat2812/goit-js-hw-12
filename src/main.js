@@ -3,9 +3,10 @@ import { getImage } from './js/pixabay-api';
 import {
   ImagesRender,
   offLouder,
+  offLouderMore,
   onImagesRenderClear,
-  onImagesRenderLarge,
   onLouder,
+  onLouderMore,
 } from './js/render-functions';
 
 export const refs = {
@@ -25,7 +26,7 @@ refs.loaderMore.addEventListener('click', onLoaderMore);
 
 async function onSearchFormImages(e) {
   e.preventDefault();
-  refs.loaderMore.classList.add('is-hidden');
+  refs.loaderMore.addEventListener('click', onLoaderMore);
   name = refs.input.value.trim();
   if (!name) {
     iziToast.error({ message: 'input empty', position: 'topRight' });
@@ -34,6 +35,7 @@ async function onSearchFormImages(e) {
   onLouder();
   onImagesRenderClear();
   try {
+    page = 1;
     const { total, totalHits, hits } = await getImage(name, page, ipPages);
     if (total === 0) {
       iziToast.error({
@@ -44,10 +46,10 @@ async function onSearchFormImages(e) {
       return;
     }
     if (totalHits / ipPages > 1) {
-      refs.loaderMore.classList.remove('is-hidden');
+      onLouderMore();
     }
     if (totalHits / ipPages <= page) {
-      refs.loaderMore.classList.add('is-hidden');
+      offLouderMore();
       refs.loaderMore.removeEventListener('click', onLoaderMore);
       iziToast.info({
         message: `We're sorry, but you've reached the end of search results.`,
@@ -57,7 +59,7 @@ async function onSearchFormImages(e) {
     const imagesCart = hits;
 
     ImagesRender(imagesCart);
-    onImagesRenderLarge();
+
     refs.form.reset();
   } catch (error) {
     iziToast.error({
@@ -70,15 +72,15 @@ async function onSearchFormImages(e) {
 }
 async function onLoaderMore() {
   page++;
-
+  refs.loaderMore.addEventListener('click', onLoaderMore);
   try {
     const { totalHits, hits } = await getImage(name, page, ipPages);
 
     if (totalHits > 1) {
-      refs.loaderMore.classList.remove('is-hidden');
+      onLouderMore();
     }
     if (totalHits / ipPages <= page) {
-      refs.loaderMore.classList.add('is-hidden');
+      offLouderMore();
       refs.loaderMore.removeEventListener('click', onLoaderMore);
       iziToast.info({
         message: `We're sorry, but you've reached the end of search results.`,
@@ -87,7 +89,7 @@ async function onLoaderMore() {
     }
 
     ImagesRender(hits);
-    onImagesRenderLarge();
+
     const elementHeight = refs.gallery.children[0].getBoundingClientRect().height;
     scrollBy({
       top: elementHeight * 2,

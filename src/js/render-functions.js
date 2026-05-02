@@ -33,6 +33,7 @@ export function ImagesRender(images) {
     )
     .join('');
   refs.gallery.insertAdjacentHTML('beforeend', i);
+  onImagesRenderLarge();
 }
 export function onImagesRenderLarge() {
   large.refresh();
@@ -48,4 +49,12 @@ export function offLouder() {
 
 export function onImagesRenderClear() {
   return (refs.gallery.innerHTML = '');
+}
+
+export function onLouderMore() {
+  return refs.loaderMore.classList.remove('is-hidden');
+}
+
+export function offLouderMore() {
+  return refs.loaderMore.classList.add('is-hidden');
 }
