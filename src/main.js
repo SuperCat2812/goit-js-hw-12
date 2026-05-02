@@ -31,10 +31,11 @@ async function onSearchFormImages(e) {
     iziToast.error({ message: 'input empty', position: 'topRight' });
     return;
   }
+  page = 1;
+  hideLoadMoreBtn();
   onLouder();
   onImagesRenderClear();
   try {
-    page = 1;
     const { total, totalHits, hits } = await getImage(name, page, ipPages);
     if (total === 0) {
       hideLoadMoreBtn();
@@ -54,11 +55,11 @@ async function onSearchFormImages(e) {
     ImagesRender(imagesCart);
 
     refs.form.reset();
-    // } catch (error) {
-    //   iziToast.error({
-    //     message: 'Error loud render',
-    //     position: 'topRight',
-    //   });
+  } catch (error) {
+    iziToast.error({
+      message: 'Error loud render',
+      position: 'topRight',
+    });
   } finally {
     await offLouder();
   }
@@ -92,5 +93,7 @@ async function onLoaderMore() {
       message: 'Error loud render',
       position: 'topRight',
     });
+  } finally {
+    offLouder();
   }
 }

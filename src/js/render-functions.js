@@ -12,19 +12,19 @@ export function ImagesRender(images) {
   <a href="${image.largeImageURL}">
         <img src="${image.webformatURL}"alt="${image.tags}"></a>
         <div class="info">
-          <div class=content>
+          <div class="content">
             <p class="name">Likes</p>
             <p>${image.likes}</p>
-          </div class=content>
-          <div class=content>
+          </div>
+          <div class="content">
             <p class="name">Views</p>
             <p>${image.views}</p>
           </div>
-          <div class=content>
+          <div class="content">
             <p class="name">Comments</p>
             <p>${image.comments}</p>
           </div>
-          <div class=content>
+          <div class="content">
             <p class="name">Downloads</p>
             <p>${image.downloads}</p>
           </div>
