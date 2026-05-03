@@ -52,7 +52,7 @@ async function onSearchFormImages(e) {
       showLoadMoreBtn();
     } else {
       hideLoadMoreBtn();
-iziToast.info({
+      iziToast.info({
         message: `We're sorry, but you've reached the end of search results.`,
         position: 'topRight',
       });
@@ -74,6 +74,7 @@ iziToast.info({
 }
 async function onLoaderMore() {
   page++;
+  onLouder();
   try {
     hideLoadMoreBtn();
     const { totalHits, hits } = await getImage(name, page, ipPages);
