@@ -14,7 +14,7 @@ export const refs = {
   input: document.querySelector('input[name="search-text"]'),
   gallery: document.querySelector('.gallery'),
   loader: document.querySelector('.loader'),
-  loadMoreBtn: document.querySelector('.load-more-btn '),
+  loadMoreBtn: document.querySelector('.load-more-btn'),
 };
 
 let page = 1;
