@@ -52,6 +52,10 @@ async function onSearchFormImages(e) {
       showLoadMoreBtn();
     } else {
       hideLoadMoreBtn();
+iziToast.info({
+        message: `We're sorry, but you've reached the end of search results.`,
+        position: 'topRight',
+      });
     }
 
     const imagesCart = hits;
